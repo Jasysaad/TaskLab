@@ -60,10 +60,11 @@ namespace TaskLab.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TaskName,Description,DueDate,IsDone")] Models.Task task)
+        public async Task<IActionResult> Create(Models.Task task)
         {
             if (ModelState.IsValid)
             {
+                task.User = await _userManager.GetUserAsync(User);
                 _context.Add(task);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
